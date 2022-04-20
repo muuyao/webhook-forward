@@ -7,7 +7,7 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  const body = JSON.parse(req.body);
+  const body = req.body;
   const headers = req.headers;
   if (headers['x-gitlab-event']) {
     const { event_type, user, repository, object_attributes } = body;
