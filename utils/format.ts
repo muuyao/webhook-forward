@@ -69,9 +69,9 @@ export function assemblyMergeRequestContent(body: any) {
         {
           tag: 'div',
           text: {
-            content: `标题：**${title}**\n操作人：**${userNameMap[user?.username as UserNameMapKey]}**\n审核人：**${
-              userNameMap[assignee?.username as UserNameMapKey]
-            }**\n\n<at id=all></at>`,
+            content: `标题：**${title}**\n操作人：**${
+              userNameMap[user?.username as UserNameMapKey]?.name
+            }**\n<at id=all></at>`,
             tag: 'lark_md',
           },
         },

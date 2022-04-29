@@ -7,7 +7,7 @@ import {
   assemblyMergeRequestContent,
   repositoryConfigs,
   RepositoryConfigsKey,
-} from './format';
+} from '../../utils/format';
 
 type Data = {
   success: boolean;
