@@ -1,6 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
+import {
+  actionMap,
+  ActionMapKey,
+  assemblyMergeRequestContent,
+  repositoryConfigs,
+  RepositoryConfigsKey,
+} from './format';
 
 type Data = {
   success: boolean;
@@ -9,31 +16,20 @@ type Data = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const body = req.body;
   const headers = req.headers;
-  if (headers['x-gitlab-event']) {
-    const { event_type, user, repository, object_attributes } = body;
-    await axios.post('https://open.feishu.cn/open-apis/bot/v2/hook/db3c5890-fe9d-451f-818d-0d06193c5c28', {
-      msg_type: 'post',
-      content: {
-        post: {
-          zh_cn: {
-            title: repository.name + ' ' + event_type,
-            content: [
-              [
-                {
-                  tag: 'text',
-                  text: '提交人: ' + user.name,
-                },
-                {
-                  tag: 'a',
-                  text: '请查看',
-                  href: object_attributes.url,
-                },
-              ],
-            ],
-          },
-        },
-      },
-    });
+  const {
+    event_type,
+    repository: { name },
+    object_attributes: { action },
+  } = body;
+  // 只处理 gitlab merge request
+  if (
+    headers['x-gitlab-event'] &&
+    event_type === 'merge_request' &&
+    repositoryConfigs[name as RepositoryConfigsKey] &&
+    actionMap[action as ActionMapKey]
+  ) {
+    const { larkHook } = repositoryConfigs[name as RepositoryConfigsKey];
+    await axios.post(larkHook, assemblyMergeRequestContent(body));
   }
 
   res.status(200).json({
