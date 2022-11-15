@@ -43,6 +43,12 @@ export const repositoryConfigs = {
   'iiots-admin-web-3.0': {
     larkHook: 'https://open.feishu.cn/open-apis/bot/v2/hook/db3c5890-fe9d-451f-818d-0d06193c5c28',
   },
+  'data-exchange-front': {
+    larkHook: 'https://open.feishu.cn/open-apis/bot/v2/hook/db3c5890-fe9d-451f-818d-0d06193c5c28',
+  },
+  'data-exchange-server': {
+    larkHook: 'https://open.feishu.cn/open-apis/bot/v2/hook/db3c5890-fe9d-451f-818d-0d06193c5c28',
+  },
 };
 
 export type UserNameMapKey = keyof typeof userNameMap;
